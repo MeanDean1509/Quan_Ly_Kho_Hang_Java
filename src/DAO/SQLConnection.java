@@ -17,7 +17,7 @@ public class SQLConnection {
 	String Username = "";
 	String Password = "";
 	String Database = "";
-
+//qưdqdwqcwqd
 	public static Connection connect = null;
 	Statement statement = null;
 	ResultSet resultSet = null;
