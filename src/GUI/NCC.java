@@ -7,9 +7,26 @@ package GUI;
 import BUS.BUS_NCC;
 import DAO.DAO_NCC;
 import DTO.DTO_NCC;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+
+import org.apache.poi.ss.usermodel.Row;
+
+import org.apache.poi.ss.usermodel.Sheet;
+
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -72,6 +89,7 @@ public class NCC extends javax.swing.JFrame {
         txt_Timkiem = new javax.swing.JTextField();
         btn_exittimkiem = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btn_excel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -291,18 +309,32 @@ public class NCC extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel1.setText("Tìm Kiếm");
 
+        btn_excel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btn_excel.setText("Xuất File Excel");
+        btn_excel.setMaximumSize(new java.awt.Dimension(100, 30));
+        btn_excel.setMinimumSize(new java.awt.Dimension(100, 30));
+        btn_excel.setPreferredSize(new java.awt.Dimension(100, 30));
+        btn_excel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_excelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_timkiemLayout = new javax.swing.GroupLayout(panel_timkiem);
         panel_timkiem.setLayout(panel_timkiemLayout);
         panel_timkiemLayout.setHorizontalGroup(
             panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_timkiemLayout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_Timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_timkiemLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_Timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_excel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(btn_exittimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         panel_timkiemLayout.setVerticalGroup(
             panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,7 +344,9 @@ public class NCC extends javax.swing.JFrame {
                     .addComponent(txt_Timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_exittimkiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(95, 95, 95))
+                .addGap(38, 38, 38)
+                .addComponent(btn_excel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(27, 27, 27))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -323,7 +357,7 @@ public class NCC extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(scroll_ncc, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE))
+                        .addComponent(scroll_ncc, javax.swing.GroupLayout.DEFAULT_SIZE, 666, Short.MAX_VALUE))
                     .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -482,6 +516,58 @@ public class NCC extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txt_TimkiemKeyReleased
 
+    private void btn_excelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excelActionPerformed
+        // TODO add your handling code here:
+        arr = nccBUS.getAllNCC();
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("danhsach");
+        XSSFRow row = null;
+        Cell cell = null;
+        row=sheet.createRow(3);
+        cell=row.createCell(0,CellType.STRING);
+        cell.setCellValue("STT");
+        cell=row.createCell(1,CellType.STRING);
+        cell.setCellValue("MaNCC");
+        cell=row.createCell(2,CellType.STRING);
+        cell.setCellValue("TenNCC");
+        cell=row.createCell(3,CellType.STRING);
+        cell.setCellValue("SDT");
+        cell=row.createCell(4,CellType.STRING);
+        cell.setCellValue("DiaChi");
+        for (int i=0; i<arr.size(); i++){
+            row=sheet.createRow(4+i);
+            
+            cell=row.createCell(0,CellType.NUMERIC);
+            cell.setCellValue(i+1);
+            
+            cell=row.createCell(1,CellType.STRING);
+            cell.setCellValue(arr.get(i).getMaNCC());
+            
+             cell=row.createCell(2,CellType.STRING);
+            cell.setCellValue(arr.get(i).getTenNCC());
+            
+             cell=row.createCell(3,CellType.STRING);
+            cell.setCellValue(arr.get(i).getSDT());
+            
+             cell=row.createCell(4,CellType.STRING);
+            cell.setCellValue(arr.get(i).getDiachi());
+        }
+        File f = new File("D:\\HK2_22-23\\Java\\Quan_Ly_Kho_Hang\\DAJ\\Quan_Ly_Kho_Hang_Java\\src\\excel\\danhsachNCC.xlsx");
+        try{
+            FileOutputStream fis = new FileOutputStream(f);
+            workbook.write(fis);
+            fis.close();
+        }
+        catch (FileNotFoundException ex){
+            ex.printStackTrace();
+        }
+        catch (IOException ex){
+            ex.printStackTrace();
+        }
+        
+        JOptionPane.showMessageDialog(this,"In thành công");
+    }//GEN-LAST:event_btn_excelActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -520,6 +606,7 @@ public class NCC extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RESET;
+    private javax.swing.JButton btn_excel;
     private javax.swing.JButton btn_exittimkiem;
     private javax.swing.JButton btn_sua;
     private javax.swing.JButton btn_them;
