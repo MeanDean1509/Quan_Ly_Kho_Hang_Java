@@ -15,12 +15,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author hieu
  */
-public class Sanpham extends javax.swing.JFrame {
+public class MatHang extends javax.swing.JFrame {
     ArrayList<DTO_mathang> arr = new ArrayList<DTO_mathang>();
     BUS_mathang mathangBUS = new BUS_mathang();
     int row;
 
-    public Sanpham() {
+    public MatHang() {
         initComponents();
         loadMathangList();
     }
@@ -61,9 +61,21 @@ public class Sanpham extends javax.swing.JFrame {
         btn_sua = new javax.swing.JButton();
         btn_xoa = new javax.swing.JButton();
         RESET = new javax.swing.JButton();
+        lb_hang = new javax.swing.JLabel();
+        txt_hang = new javax.swing.JTextField();
+        lb_soluong = new javax.swing.JLabel();
+        txt_soluong = new javax.swing.JTextField();
+        lb_dongia = new javax.swing.JLabel();
+        txt_dongia = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         panel_timkiem = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txt_Timkiem = new javax.swing.JTextField();
+        btn_exittimkiem = new javax.swing.JButton();
+        btn_excel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("MẶT HÀNG");
 
         scroll_sanpham.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         scroll_sanpham.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -78,14 +90,14 @@ public class Sanpham extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã mặt hàng", "Tên mặt hàng", "Nhà cung cấp"
+                "Mã mặt hàng", "Tên mặt hàng", "Nhà cung cấp", "Hãng", "Số Lượng ", "Đơn Giá"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -96,7 +108,6 @@ public class Sanpham extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tb_sanpham.setRowHeight(20);
         tb_sanpham.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tb_sanphamMouseClicked(evt);
@@ -105,13 +116,13 @@ public class Sanpham extends javax.swing.JFrame {
         scroll_sanpham.setViewportView(tb_sanpham);
 
         lb_welcome.setFont(new java.awt.Font("Dialog", 1, 36)); // NOI18N
-        lb_welcome.setText("SẢN PHẨM");
+        lb_welcome.setText("MẶT HÀNG");
 
         javax.swing.GroupLayout panel_1Layout = new javax.swing.GroupLayout(panel_1);
         panel_1.setLayout(panel_1Layout);
         panel_1Layout.setHorizontalGroup(
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 583, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
             .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panel_1Layout.createSequentialGroup()
                     .addGap(0, 197, Short.MAX_VALUE)
@@ -146,7 +157,14 @@ public class Sanpham extends javax.swing.JFrame {
 
         txt_tenmathang.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
 
+        txt_mancc.setEditable(false);
         txt_mancc.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        txt_mancc.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txt_mancc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_manccActionPerformed(evt);
+            }
+        });
 
         btn_them.setText("THÊM");
         btn_them.setMaximumSize(new java.awt.Dimension(100, 30));
@@ -183,6 +201,28 @@ public class Sanpham extends javax.swing.JFrame {
         RESET.setMinimumSize(new java.awt.Dimension(100, 30));
         RESET.setPreferredSize(new java.awt.Dimension(100, 30));
 
+        lb_hang.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lb_hang.setText("Hãng");
+
+        txt_hang.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        lb_soluong.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lb_soluong.setText("Số Lượng");
+
+        txt_soluong.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        lb_dongia.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        lb_dongia.setText("Đơn Giá");
+
+        txt_dongia.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+
+        jButton1.setText("Chọn");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_themsuaxoaLayout = new javax.swing.GroupLayout(panel_themsuaxoa);
         panel_themsuaxoa.setLayout(panel_themsuaxoaLayout);
         panel_themsuaxoaLayout.setHorizontalGroup(
@@ -191,24 +231,34 @@ public class Sanpham extends javax.swing.JFrame {
                 .addGap(70, 70, 70)
                 .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_themsuaxoaLayout.createSequentialGroup()
+                        .addComponent(btn_them, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_sua, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_xoa, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(RESET, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE))
+                    .addGroup(panel_themsuaxoaLayout.createSequentialGroup()
                         .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lb_soluong, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lb_tenmathang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lb_mamathang, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lb_mancc, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
+                            .addComponent(lb_mancc, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
+                            .addComponent(lb_hang, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txt_mamathang)
                             .addComponent(txt_tenmathang)
-                            .addComponent(txt_mancc)))
+                            .addComponent(txt_hang)
+                            .addComponent(txt_dongia, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_soluong)
+                            .addGroup(panel_themsuaxoaLayout.createSequentialGroup()
+                                .addComponent(txt_mancc, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1))))
                     .addGroup(panel_themsuaxoaLayout.createSequentialGroup()
-                        .addComponent(btn_them, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btn_sua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(20, 20, 20)
-                        .addComponent(btn_xoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(20, 20, 20)
-                        .addComponent(RESET, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(2, 2, 2)))
+                        .addComponent(lb_dongia, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(62, 62, 62))
         );
         panel_themsuaxoaLayout.setVerticalGroup(
@@ -218,32 +268,107 @@ public class Sanpham extends javax.swing.JFrame {
                 .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_mamathang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_mamathang))
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_tenmathang)
+                    .addComponent(txt_tenmathang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lb_mancc)
+                    .addComponent(txt_mancc)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lb_tenmathang, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_tenmathang))
-                .addGap(20, 20, 20)
+                    .addComponent(txt_hang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lb_hang))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lb_mancc, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_mancc))
-                .addGap(39, 39, 39)
+                    .addComponent(txt_soluong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lb_soluong))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_dongia)
+                    .addComponent(txt_dongia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
                 .addGroup(panel_themsuaxoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_them, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_sua, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_xoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(RESET, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(50, 50, 50))
+                .addGap(33, 33, 33))
         );
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        jLabel1.setText("Tìm Kiếm");
+
+        txt_Timkiem.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        txt_Timkiem.setForeground(new java.awt.Color(102, 102, 102));
+        txt_Timkiem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txt_TimkiemMouseClicked(evt);
+            }
+        });
+        txt_Timkiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_TimkiemActionPerformed(evt);
+            }
+        });
+        txt_Timkiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_TimkiemKeyReleased(evt);
+            }
+        });
+
+        btn_exittimkiem.setText("EXIT");
+        btn_exittimkiem.setMaximumSize(new java.awt.Dimension(100, 30));
+        btn_exittimkiem.setMinimumSize(new java.awt.Dimension(100, 30));
+        btn_exittimkiem.setPreferredSize(new java.awt.Dimension(100, 30));
+        btn_exittimkiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_exittimkiemActionPerformed(evt);
+            }
+        });
+
+        btn_excel.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
+        btn_excel.setText("Xuất File Excel");
+        btn_excel.setMaximumSize(new java.awt.Dimension(100, 30));
+        btn_excel.setMinimumSize(new java.awt.Dimension(100, 30));
+        btn_excel.setPreferredSize(new java.awt.Dimension(100, 30));
+        btn_excel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_excelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_timkiemLayout = new javax.swing.GroupLayout(panel_timkiem);
         panel_timkiem.setLayout(panel_timkiemLayout);
         panel_timkiemLayout.setHorizontalGroup(
             panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(panel_timkiemLayout.createSequentialGroup()
+                .addGroup(panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_timkiemLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txt_Timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_exittimkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel_timkiemLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btn_excel, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel_timkiemLayout.setVerticalGroup(
             panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 302, Short.MAX_VALUE)
+            .addGroup(panel_timkiemLayout.createSequentialGroup()
+                .addGap(47, 47, 47)
+                .addGroup(panel_timkiemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_Timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_exittimkiem, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addComponent(btn_excel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(41, 41, 41))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -256,9 +381,8 @@ public class Sanpham extends javax.swing.JFrame {
                         .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(23, 23, 23))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(scroll_sanpham)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                        .addComponent(scroll_sanpham, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_themsuaxoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panel_timkiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -268,13 +392,13 @@ public class Sanpham extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(panel_themsuaxoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(1, 1, 1)
-                        .addComponent(panel_timkiem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(panel_themsuaxoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panel_timkiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(scroll_sanpham, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
+                        .addComponent(scroll_sanpham, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
                         .addGap(16, 16, 16)))
                 .addGap(0, 0, 0))
         );
@@ -344,6 +468,102 @@ public class Sanpham extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_mamathangActionPerformed
 
+    private void txt_manccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_manccActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_manccActionPerformed
+
+    private void txt_TimkiemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txt_TimkiemMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txt_TimkiemMouseClicked
+
+    private void txt_TimkiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_TimkiemActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_txt_TimkiemActionPerformed
+
+    private void txt_TimkiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_TimkiemKeyReleased
+//        // TODO add your handling code here:
+//        DefaultTableModel dtm = (DefaultTableModel) tb_ncc.getModel();
+//        dtm.setRowCount(0);
+//        arr = nccBUS.timkiem(txt_Timkiem.getText());
+//        for (int i = 0; i < arr.size(); i++) {
+//            String MaNCC = arr.get(i).getMaNCC();
+//            String TenNCC = arr.get(i).getTenNCC();
+//            String SDT = arr.get(i).getSDT();
+//            String Diachi = arr.get(i).getDiachi();
+//            Object[] row = {MaNCC,TenNCC,SDT,Diachi};
+//            dtm.addRow(row);
+//        }
+
+    }//GEN-LAST:event_txt_TimkiemKeyReleased
+
+    private void btn_exittimkiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_exittimkiemActionPerformed
+        // TODO add your handling code here:
+//        loadNCCList();
+    }//GEN-LAST:event_btn_exittimkiemActionPerformed
+
+    private void btn_excelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_excelActionPerformed
+//        // TODO add your handling code here:
+//        arr = nccBUS.getAllNCC();
+//        XSSFWorkbook workbook = new XSSFWorkbook();
+//        XSSFSheet sheet = workbook.createSheet("danhsach");
+//        XSSFRow row = null;
+//        Cell cell = null;
+//        row=sheet.createRow(3);
+//        cell=row.createCell(0,CellType.STRING);
+//        cell.setCellValue("STT");
+//        cell=row.createCell(1,CellType.STRING);
+//        cell.setCellValue("MaNCC");
+//        cell=row.createCell(2,CellType.STRING);
+//        cell.setCellValue("TenNCC");
+//        cell=row.createCell(3,CellType.STRING);
+//        cell.setCellValue("SDT");
+//        cell=row.createCell(4,CellType.STRING);
+//        cell.setCellValue("DiaChi");
+//        for (int i=0; i<arr.size(); i++){
+//            row=sheet.createRow(4+i);
+//
+//            cell=row.createCell(0,CellType.NUMERIC);
+//            cell.setCellValue(i+1);
+//
+//            cell=row.createCell(1,CellType.STRING);
+//            cell.setCellValue(arr.get(i).getMaNCC());
+//
+//            cell=row.createCell(2,CellType.STRING);
+//            cell.setCellValue(arr.get(i).getTenNCC());
+//
+//            cell=row.createCell(3,CellType.STRING);
+//            cell.setCellValue(arr.get(i).getSDT());
+//
+//            cell=row.createCell(4,CellType.STRING);
+//            cell.setCellValue(arr.get(i).getDiachi());
+//        }
+//        File f = new File("D:\\HK2_22-23\\Java\\Quan_Ly_Kho_Hang\\DAJ\\Quan_Ly_Kho_Hang_Java\\src\\excel\\danhsachNCC.xlsx");
+//        try{
+//            FileOutputStream fis = new FileOutputStream(f);
+//            workbook.write(fis);
+//            fis.close();
+//        }
+//        catch (FileNotFoundException ex){
+//            ex.printStackTrace();
+//        }
+//        catch (IOException ex){
+//            ex.printStackTrace();
+//        }
+//
+//        JOptionPane.showMessageDialog(this,"In thành công");
+    }//GEN-LAST:event_btn_excelActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        DanhSachNCC ds = new DanhSachNCC();
+        ds.setVisible(true);
+        ds.setLocationRelativeTo(null);
+        ds.setDefaultCloseOperation(DanhSachNCC.DISPOSE_ON_CLOSE);
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -361,31 +581,39 @@ public class Sanpham extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Sanpham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MatHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Sanpham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MatHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Sanpham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MatHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Sanpham.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MatHang.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Sanpham().setVisible(true);
+                new MatHang().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RESET;
+    private javax.swing.JButton btn_excel;
+    private javax.swing.JButton btn_exittimkiem;
     private javax.swing.JButton btn_sua;
     private javax.swing.JButton btn_them;
     private javax.swing.JButton btn_xoa;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lb_dongia;
+    private javax.swing.JLabel lb_hang;
     private javax.swing.JLabel lb_mamathang;
     private javax.swing.JLabel lb_mancc;
+    private javax.swing.JLabel lb_soluong;
     private javax.swing.JLabel lb_tenmathang;
     private javax.swing.JLabel lb_welcome;
     private javax.swing.JPanel panel_1;
@@ -393,8 +621,12 @@ public class Sanpham extends javax.swing.JFrame {
     private javax.swing.JPanel panel_timkiem;
     private javax.swing.JScrollPane scroll_sanpham;
     private javax.swing.JTable tb_sanpham;
+    private javax.swing.JTextField txt_Timkiem;
+    private javax.swing.JTextField txt_dongia;
+    private javax.swing.JTextField txt_hang;
     private javax.swing.JTextField txt_mamathang;
     private javax.swing.JTextField txt_mancc;
+    private javax.swing.JTextField txt_soluong;
     private javax.swing.JTextField txt_tenmathang;
     // End of variables declaration//GEN-END:variables
 }

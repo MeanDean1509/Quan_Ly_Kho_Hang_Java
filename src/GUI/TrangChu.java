@@ -267,7 +267,7 @@ public class TrangChu extends javax.swing.JFrame {
     
     
     private void lb_sanphamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_sanphamMouseClicked
-        Sanpham sv = new Sanpham();
+        MatHang sv = new MatHang();
         pn_main.removeAll();
      //   pn_main.setLayout(new BorderLayout());
         pn_main.add(sv.getContentPane());
